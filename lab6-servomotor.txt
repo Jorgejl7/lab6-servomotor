@@ -1,0 +1,86 @@
+// Incluímos la librería para poder controlar el servo
+#include <Servo.h>
+
+// Declaramos la variable para controlar el servo
+Servo servoMotor;
+int input;
+int i=0;
+
+void setup() {
+  // Iniciamos el monitor serie para mostrar el resultado
+  Serial.begin(9600);
+
+  // Iniciamos el servo para que empiece a trabajar con el pin 9
+  servoMotor.attach(9);
+  
+}
+
+void loop() {
+  angulo();
+  direccion();
+  velocidad();
+}
+
+void angulo(){
+  if (Serial.available()>0){
+ 
+    input=Serial.read();
+    if (input=='0'){
+      Serial.println(F("El servomotor gira 0 grados"));
+      servoMotor.write(0);
+    }
+    
+    if (input=='9'){
+      Serial.println(F("El servomotor gira 90 grados"));
+      servoMotor.write(90);
+    }
+    
+    if (input=='8'){
+      Serial.println(F("El servomotor gira 180 grados"));
+      servoMotor.write(180);
+    }
+  }
+}
+
+void direccion(){
+  if (Serial.available()>0){
+ 
+    input=Serial.read();
+    if (input=='d'){
+      Serial.println(F("El servomotor gira hacia a la derecha"));
+      servoMotor.write(0);
+    }
+    
+    if (input=='n'){
+      Serial.println(F("El servomotor gira de manera neutral"));
+      servoMotor.write(90);
+    }
+    
+    if (input=='i'){
+      Serial.println(F("El servomotor gira hacia la izquierda"));
+      servoMotor.write(180);
+    }
+  }
+}
+
+void velocidad(){
+  if (Serial.available()>0){
+ 
+    input=Serial.read();
+    if (input=='a'){
+      Serial.println(F("El servomotor aumentara su velocidad"));
+       for (int i = 0; i <= 100; i++) {
+        servoMotor.write(i);  // aumenta la velocidad gradualmente
+        delay(20);  // espera 20 milisegundos
+      }
+    }
+    
+    if (input=='r'){
+      Serial.println(F("El servomotor reduce su velocidad"));
+      for (int i = 100; i >= 0; i--) {
+        servoMotor.write(i);  // disminuye la velocidad gradualmente
+        delay(20);  // espera 20 milisegundos
+      }
+    }
+  }
+}
